@@ -1,6 +1,8 @@
 import compression from "compression";
 import cors from "cors";
 import express from "express";
+import { errorHandler } from "./middlewares/errorHandler";
+import { userRouter } from "./modules/user/user.route";
 
 const app = express();
 
@@ -15,6 +17,9 @@ app.use(
     credentials: true,
   })
 );
+
+// routes
+app.use('/user', userRouter)
 
 
 // Default route for testing
@@ -31,4 +36,5 @@ app.use((req, res, next) => {
   });
 });
 
+app.use(errorHandler)
 export default app;
