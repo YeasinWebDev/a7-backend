@@ -5,8 +5,6 @@ import { Response } from "express";
 import { createJwtToken } from "../../uilts/JwtToken";
 import { JwtPayload } from "jsonwebtoken";
 
-
-
 const register = async (name: string, email: string, password: string, res: Response) => {
   const hashedPassword = bcrypt.hashSync(password, 10);
   const user = await prisma.user.create({
@@ -26,7 +24,7 @@ const register = async (name: string, email: string, password: string, res: Resp
   return user;
 };
 
-const login = async (email: string, password: string ,res: Response) => {
+const login = async (email: string, password: string, res: Response) => {
   const user = await prisma.user.findUnique({
     where: {
       email,
@@ -41,24 +39,27 @@ const login = async (email: string, password: string ,res: Response) => {
 
   const token = createJwtToken(user);
 
-  res.cookie("token", token, { httpOnly: true, secure: true, sameSite: "none" });
-
-  return user;
+  return { user, token };
 };
 
 const me = async (token: JwtPayload) => {
-    const isUserExist = await prisma.user.findUnique({
-      where: {
-        email: token.email
-      },
-    });
+  const isUserExist = await prisma.user.findUnique({
+    where: {
+      email: token.email,
+    },
+  });
 
-    if(!isUserExist) throw new AppError("User not found", 404)
-    return isUserExist
+  if (!isUserExist) throw new AppError("User not found", 404);
+  return isUserExist;
+};
+
+const logOut = (res: Response) => {
+  res.clearCookie("token", { httpOnly: true, secure: true, sameSite: "none" });
 };
 
 export const userService = {
   login,
   register,
-  me
+  me,
+  logOut,
 };

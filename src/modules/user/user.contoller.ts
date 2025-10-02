@@ -39,8 +39,19 @@ const me = async (req: Request, res: Response) => {
   }
 };
 
+const logout = (req: Request, res: Response) => {
+  try {
+    userService.logOut(res);
+    return res.status(200).json({ message: "Logout successful" });
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ message: "Internal server error" });
+  }
+};
+
 export const userController = {
   login,
   register,
-  me
+  me,
+  logout,
 };
