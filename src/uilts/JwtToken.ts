@@ -9,6 +9,7 @@ export const createJwtToken = (user: User) => {
 };
 
 export const verifyToken = (token: string, secret: string) => {
+  if(!token) return false;
   const verifiedToken = jwt.verify(token, secret);
 
   return verifiedToken;

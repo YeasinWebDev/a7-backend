@@ -31,6 +31,8 @@ const me = async (req: Request, res: Response) => {
   try {
     const accessToken = req.cookies.token;
     const token = verifyToken(accessToken, process.env.JWT_SECRET!) as JwtPayload;
+    if (!token) return res.status(401).json({ message: "Unauthorized" });
+    
     const user = await userService.me(token);
     return res.status(200).json(user);
   } catch (error) {
