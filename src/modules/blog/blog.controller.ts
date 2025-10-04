@@ -4,7 +4,6 @@ import { blogService } from "./blog.services";
 const createBlogs = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const ans = await blogService.createBlog(req.body);
-    console.log(ans, "ans");
     return res.status(201).json(ans);
   } catch (error) {
     next(error);
