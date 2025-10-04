@@ -5,6 +5,7 @@ import { errorHandler } from "./middlewares/errorHandler";
 import { userRouter } from "./modules/user/user.route";
 import cookieParser from "cookie-parser";
 import { blogRouter } from "./modules/blog/blog.route";
+import { projectRouter } from "./modules/project/project.route";
 
 const app = express();
 
@@ -24,6 +25,7 @@ app.use(
 // routes
 app.use('/user', userRouter)
 app.use('/blog', blogRouter)
+app.use('/project', projectRouter)
 
 
 // Default route for testing
