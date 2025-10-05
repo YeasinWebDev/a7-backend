@@ -10,14 +10,13 @@ import { projectRouter } from "./modules/project/project.route";
 const app = express();
 
 // Middleware
-app.use(cors()); 
 app.use(compression()); 
 app.use(express.json()); 
 app.use(cookieParser());
 
 app.use(
   cors({
-    origin: "http://localhost:3000",
+    origin: ["http://localhost:3000","https://a7-frontend.vercel.app"],
     credentials: true,
   })
 );

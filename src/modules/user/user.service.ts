@@ -39,6 +39,7 @@ const login = async (email: string, password: string, res: Response) => {
 
   const token = createJwtToken(user);
 
+  res.cookie("token", token, { httpOnly: true, secure: true, sameSite: "none" });
   return { user, token };
 };
 

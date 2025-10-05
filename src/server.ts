@@ -1,35 +1,26 @@
-import http, { Server } from "http";
 import app from "./app";
-import dotenv from "dotenv";
 import { prisma } from "./config/db";
+import dotenv from "dotenv";
 
 dotenv.config();
 
-let server: Server | null = null;
-
-
 async function connectToDB() {
   try {
-    await prisma.$connect()
-    console.log("*** DB connection successfull!!")
+    await prisma.$connect();
+    console.log("*** DB connection successful!!");
   } catch (error) {
-    console.log(error)
-    console.log("*** DB connection failed!")
-    process.exit(1);
-  }
-}
-async function startServer() {
-  try {
-    await connectToDB()
-    server = http.createServer(app);
-    server.listen(process.env.PORT, () => {
-      console.log(`🚀 Server is running on port ${process.env.PORT}`);
-    });
-
-  } catch (error) {
-    console.error("❌ Error during server startup:", error);
-    process.exit(1);
+    console.error("*** DB connection failed!", error);
   }
 }
 
-startServer();
+connectToDB();
+
+// ✅ Local development only
+if (process.env.NODE_ENV !== "production") {
+  const port = process.env.PORT || 5000;
+  app.listen(port, () => {
+    console.log(`🚀 Server running locally on port ${port}`);
+  });
+}
+
+export default app;
